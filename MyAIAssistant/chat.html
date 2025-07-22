@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>My AI Assistant</title>
+  <style>
+    body { font-family: Arial; padding: 20px; background: #f4f4f4; }
+    #chat-box { max-width: 600px; margin: auto; background: white; padding: 20px; border-radius: 8px; }
+    .message { margin-bottom: 10px; }
+    .user { font-weight: bold; }
+    .ai { color: #007acc; }
+  </style>
+</head>
+<body>
+  <div id="chat-box">
+    <h2>AI Chat</h2>
+    <div id="messages"></div>
+    <input type="text" id="user-input" placeholder="Type your message..." style="width: 80%;">
+    <button onclick="sendMessage()">Send</button>
+  </div>
+
+  <script>
+    async function sendMessage() {
+      const input = document.getElementById("user-input");
+      const text = input.value.trim();
+      if (!text) return;
+
+      const messages = document.getElementById("messages");
+      messages.innerHTML += `<div class="message user">You: ${text}</div>`;
+      input.value = "";
+
+      const response = await fetch("/chat", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ prompt: text })
+      });
+      const data = await response.json();
+      messages.innerHTML += `<div class="message ai">AI: ${data.response}</div>`;
+    }
+  </script>
+<div id="footer">Made by James Harding</div>
+</body>
+</html>
